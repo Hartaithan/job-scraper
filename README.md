@@ -1,1 +1,1 @@
-"# vacancy-scraper" 
+"# job-scraper" 

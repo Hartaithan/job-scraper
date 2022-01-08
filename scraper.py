@@ -8,7 +8,12 @@ result = list()
 vacancies = get_html.find_all(class_='r-vacancy_list_item')
 for index, v in enumerate(vacancies, start=1):
     title = v.find(class_='r-vacancy_title').get_text()
+    link = "https://rabota.ykt.ru" + \
+        v.find(class_='r-vacancy_title_link').attrs['href']
     company = v.find(class_='r-vacancy_company').find("a").get_text()
+    phone = v.find(class_='r-vacancy_contacts_phone').get_text().replace('\n', '').replace('\xa0', '') if v.find(
+        class_='r-vacancy_contacts_phone') else "Телефон не указан"
+    email = v.find(class_='r-vacancy_contacts_email').find("a").get_text()
     salary = v.find(class_='r-vacancy_salary').get_text().replace('\n', '')
     createdate = v.find(class_='r-vacancy_createdate').get_text()
 
@@ -25,7 +30,7 @@ for index, v in enumerate(vacancies, start=1):
     ).get_text().replace('\n', '')
     conditions = full_titles[2].find_next_sibling(
     ).get_text().replace('\n', '')
-    result.append({"id": index, "title": title, "company": company, "salary": salary,
-                   "createdate": createdate, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
+    result.append({"id": index, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
+                   "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
 
-print(list(result))
+print(result)

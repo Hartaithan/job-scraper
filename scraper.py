@@ -6,10 +6,11 @@ get_html = BeautifulSoup(requests.get(url).text, "html.parser")
 
 result = list()
 vacancies = get_html.find_all(class_='r-vacancy_list_item')
-for index, v in enumerate(vacancies, start=1):
+for v in vacancies:
     title = v.find(class_='r-vacancy_title').get_text()
     link = "https://rabota.ykt.ru" + \
         v.find(class_='r-vacancy_title_link').attrs['href']
+    id = link.split('id=')[1]
     company = v.find(class_='r-vacancy_company').find("a").get_text()
     phone = v.find(class_='r-vacancy_contacts_phone').get_text().replace('\n', '').replace('\xa0', '') if v.find(
         class_='r-vacancy_contacts_phone') else "Телефон не указан"
@@ -30,7 +31,7 @@ for index, v in enumerate(vacancies, start=1):
     ).get_text().replace('\n', '')
     conditions = full_titles[2].find_next_sibling(
     ).get_text().replace('\n', '')
-    result.append({"id": index, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
+    result.append({"id": id, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                    "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
 
-print(result)
+print(result[0])

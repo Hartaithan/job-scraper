@@ -22,7 +22,8 @@ for page in range(1, pages + 1):
         company = v.find(class_='r-vacancy_company').find("a").get_text()
         phone = v.find(class_='r-vacancy_contacts_phone').get_text().replace('\n', '').replace('\xa0', '') if v.find(
             class_='r-vacancy_contacts_phone') else "Телефон не указан"
-        email = v.find(class_='r-vacancy_contacts_email').find("a").get_text()
+        email = v.find(class_='r-vacancy_contacts_email').find("a").get_text(
+        ) if v.find(class_='r-vacancy_contacts_email') else "Email не указан"
         salary = v.find(class_='r-vacancy_salary').get_text().replace('\n', '')
         createdate = "Дата не найдена"
         date_div = v.find(class_='r-vacancy_createdate')
@@ -30,19 +31,42 @@ for page in range(1, pages + 1):
             createdate = date_div.get_text()
         if date_div and "Сегодня" in date_div.get_text():
             createdate = datetime.datetime.now().strftime("%d.%m.%Y")
+
         box = v.find(class_='r-vacancy_box').find_all('dd')
-        education = box[0].get_text()
-        experience = box[1].get_text()
-        schedule = box[2].get_text()
+        try:
+            education = box[0].get_text()
+        except IndexError:
+            education = "Требуемое образование не указано"
+        try:
+            experience = box[1].get_text()
+        except IndexError:
+            experience = "Требуемый опыт не указан"
+        try:
+            schedule = box[2].get_text()
+        except IndexError:
+            schedule = "График не указан"
 
         full_titles = v.find_all(class_='r-vacancy_body_full_title')
-        description = full_titles[0].find_previous_sibling().get_text()
-        responsibilities = full_titles[0].find_next_sibling(
-        ).get_text(separator='\n', strip=True)
-        requirements = full_titles[1].find_next_sibling(
-        ).get_text(separator='\n', strip=True)
-        conditions = full_titles[2].find_next_sibling(
-        ).get_text(separator='\n', strip=True)
+        try:
+            description = full_titles[0].find_previous_sibling().get_text()
+        except IndexError:
+            description = "Описание вакансии не добавлено"
+        try:
+            responsibilities = full_titles[0].find_next_sibling().get_text(
+                separator='\n', strip=True)
+        except IndexError:
+            responsibilities = "Обязанности вакансии не добавлено"
+        try:
+            requirements = full_titles[1].find_next_sibling(
+            ).get_text(separator='\n', strip=True)
+        except IndexError:
+            requirements = "Требования вакансии не добавлено"
+        try:
+            conditions = full_titles[2].find_next_sibling(
+            ).get_text(separator='\n', strip=True)
+        except IndexError:
+            conditions = "Условия работы не добавлено"
+
         result.append({"id": id, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                        "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
 

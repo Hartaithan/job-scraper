@@ -3,14 +3,15 @@ import requests
 import datetime
 import json
 
+categoryId = "2083"
 get_pages = BeautifulSoup(requests.get(
-    "https://rabota.ykt.ru/jobs?categoriesIds=2083").text, "html.parser")
+    f"https://rabota.ykt.ru/jobs?categoriesIds={categoryId}").text, "html.parser")
 pages = int(get_pages.find_all(class_='yui-pagination_page')
             [-2].find('a').get_text())
 
 result = list()
 for page in range(1, pages + 1):
-    url = f"https://rabota.ykt.ru/jobs?categoriesIds=2083&page={page}"
+    url = f"https://rabota.ykt.ru/jobs?categoriesIds={categoryId}&page={page}"
     get_html = BeautifulSoup(requests.get(url).text, "html.parser")
 
     vacancies = get_html.find_all(class_='r-vacancy_list_item')

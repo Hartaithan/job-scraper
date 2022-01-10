@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import datetime
 
 get_pages = BeautifulSoup(requests.get(
     "https://rabota.ykt.ru/jobs?categoriesIds=2083").text, "html.parser")
@@ -22,8 +23,12 @@ for page in range(1, pages + 1):
             class_='r-vacancy_contacts_phone') else "Телефон не указан"
         email = v.find(class_='r-vacancy_contacts_email').find("a").get_text()
         salary = v.find(class_='r-vacancy_salary').get_text().replace('\n', '')
-        createdate = v.find(class_='r-vacancy_createdate').get_text()
-
+        createdate = "Дата не найдена"
+        date_div = v.find(class_='r-vacancy_createdate')
+        if date_div:
+            createdate = date_div.get_text()
+        if date_div and "Сегодня" in date_div.get_text():
+            createdate = datetime.datetime.now().strftime("%d.%m.%Y")
         box = v.find(class_='r-vacancy_box').find_all('dd')
         education = box[0].get_text()
         experience = box[1].get_text()

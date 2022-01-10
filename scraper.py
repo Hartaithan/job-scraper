@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import datetime
+import json
 
 get_pages = BeautifulSoup(requests.get(
     "https://rabota.ykt.ru/jobs?categoriesIds=2083").text, "html.parser")
@@ -44,3 +45,6 @@ for page in range(1, pages + 1):
         ).get_text(separator='\n', strip=True)
         result.append({"id": id, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                        "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
+
+with open("result.json", "w", encoding='utf8') as f:
+    json.dump(result, f, ensure_ascii=False)

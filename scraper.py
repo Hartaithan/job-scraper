@@ -37,10 +37,10 @@ for page in range(1, pages + 1):
         full_titles = v.find_all(class_='r-vacancy_body_full_title')
         description = full_titles[0].find_previous_sibling().get_text()
         responsibilities = full_titles[0].find_next_sibling(
-        ).get_text().replace('\n', '')
+        ).get_text(separator='\n', strip=True)
         requirements = full_titles[1].find_next_sibling(
-        ).get_text().replace('\n', '')
+        ).get_text(separator='\n', strip=True)
         conditions = full_titles[2].find_next_sibling(
-        ).get_text().replace('\n', '')
+        ).get_text(separator='\n', strip=True)
         result.append({"id": id, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                        "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})

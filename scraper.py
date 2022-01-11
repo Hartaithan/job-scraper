@@ -15,6 +15,9 @@ for page in range(1, pages + 1):
     get_html = BeautifulSoup(requests.get(url).text, "html.parser")
 
     vacancies = get_html.find_all(class_='r-vacancy_list_item')
+    if len(vacancies) == 0:
+        print(f"Страница {page} пропущена")
+        continue
     for v in vacancies:
         title = v.find(class_='r-vacancy_title').get_text()
         link = "https://rabota.ykt.ru" + \
@@ -78,6 +81,8 @@ for page in range(1, pages + 1):
 
         result.append({"id": id, "type": type, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                        "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
+
+    print(f"Страница {page} спаршена")
 
 with open("result.json", "w", encoding='utf8') as f:
     json.dump(result, f, ensure_ascii=False)

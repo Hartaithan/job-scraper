@@ -4,15 +4,15 @@ import datetime
 import json
 
 categoryId = "2083"
-get_pages = BeautifulSoup(requests.get(
-    f"https://rabota.ykt.ru/jobs?categoriesIds={categoryId}").text, "html.parser")
+base_url = f"https://rabota.ykt.ru/jobs?categoriesIds={categoryId}"
+get_pages = BeautifulSoup(requests.get(base_url).text, "html.parser")
 pages = int(get_pages.find_all(class_='yui-pagination_page')
             [-2].find('a').get_text())
 
 result = list()
 for page in range(1, pages + 1):
-    url = f"https://rabota.ykt.ru/jobs?categoriesIds={categoryId}&page={page}"
-    get_html = BeautifulSoup(requests.get(url).text, "html.parser")
+    page_url = f"{base_url}&page={page}"
+    get_html = BeautifulSoup(requests.get(page_url).text, "html.parser")
 
     vacancies = get_html.find_all(class_='r-vacancy_list_item')
     if len(vacancies) == 0:

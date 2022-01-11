@@ -23,7 +23,8 @@ for page in range(1, pages + 1):
         link = "https://rabota.ykt.ru" + \
             v.find(class_='r-vacancy_title_link').attrs['href']
         id = link.split('id=')[1]
-        company = v.find(class_='r-vacancy_company').find("a").get_text()
+        company = v.find(class_='r-vacancy_company').find("a").get_text() if v.find(
+            class_='r-vacancy_company').find("a") else "Компания не указана"
         phone = v.find(class_='r-vacancy_contacts_phone').get_text().replace('\n', '').replace('\xa0', '') if v.find(
             class_='r-vacancy_contacts_phone') else "Телефон не указан"
         email = v.find(class_='r-vacancy_contacts_email').find("a").get_text(

@@ -33,6 +33,14 @@ for page in range(1, pages + 1):
         if date_div and "Сегодня" in date_div.get_text():
             createdate = datetime.datetime.now().strftime("%d.%m.%Y")
 
+        classes = v.find('div')["class"]
+        if "r-vacancy--vip" in classes:
+            type = "VIP вакансия"
+        elif "r-vacancy--paid" in classes:
+            type = "Платная вакансия"
+        else:
+            type = "Бесплатная вакансия"
+
         box = v.find(class_='r-vacancy_box').find_all('dd')
         try:
             education = box[0].get_text()
@@ -68,7 +76,7 @@ for page in range(1, pages + 1):
         except IndexError:
             conditions = "Условия работы не добавлено"
 
-        result.append({"id": id, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
+        result.append({"id": id, "type": type, "title": title, "company": company, "phone": phone, "email": email, "salary": salary,
                        "createdate": createdate, "link": link, "education": education, "schedule": schedule, "description": description, "responsibilities": responsibilities, "requirements": requirements, "conditions": conditions})
 
 with open("result.json", "w", encoding='utf8') as f:
